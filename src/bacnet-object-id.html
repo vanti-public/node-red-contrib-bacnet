@@ -24,9 +24,15 @@
       return "BACnet ObjectId";
     },
     oneditprepare() {
+      const node = this
       $.getJSON('/bacnet/object-types', function (options) {
+        const selected = node.objectType ? node.objectType : 'ANALOG_INPUT';
         for (let i = 0; i < options.length; i++) {
-          $('#node-config-input-objectType').append($("<option></option>").attr("value", options[i]).text(options[i]));
+          const option = $("<option></option>").attr("value", options[i]).text(options[i]);
+          if (options[i] === selected) {
+            option.attr('selected', 'selected');
+          }
+          $('#node-config-input-objectType').append(option);
         }
       });
     }
