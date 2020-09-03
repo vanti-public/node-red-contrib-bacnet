@@ -1,0 +1,57 @@
+<!--
+ The MIT License
+
+ Copyright (c) 2017,2018,2019,2020 Klaus Landsdorf (https://osi.bianco-royal.com/)
+ All rights reserved.
+ node-red-contrib-bacnet
+-->
+
+<script type="text/javascript">
+  RED.nodes.registerType('BACnet-ObjectId', {
+    category: 'config',
+    defaults: {
+      name: {value: ""},
+      objectInstance: {value: 0, validate: RED.validators.number()},
+      objectType: {value: ""}
+    },
+    label: function () {
+      if (this.name) {
+        return this.name;
+      }
+      if (this.objectType) {
+        return this.objectType + ':' + this.objectInstance;
+      }
+      return "BACnet ObjectId";
+    },
+    oneditprepare() {
+      $.getJSON('/bacnet/object-types', function (options) {
+        for (let i = 0; i < options.length; i++) {
+          $('#node-config-input-objectType').append($("<option></option>").attr("value", options[i]).text(options[i]));
+        }
+      });
+    }
+  });
+</script>
+
+<script type="text/x-red" data-template-name="BACnet-ObjectId">
+    <div class="form-row">
+        <label for="node-config-input-name"><i class="icon-tag"></i> <span data-i18n="node-red:common.label.name"></span></label>
+        <input type="text" id="node-config-input-name" placeholder="">
+    </div>
+    <div class="form-row">
+        <label for="node-config-input-objectType"><i class="icon-tag"></i> <span data-i18n="bacnet-contrib.label.objectType"></span></label>
+        <select class="type" type="text" id="node-config-input-objectType"></select>
+    </div>
+    <div class="form-row">
+        <label for="node-config-input-objectInstance"><i class="icon-tag"></i> <span data-i18n="bacnet-contrib.label.objectInstance"></span></label>
+        <input type="number" id="node-config-input-objectInstance" placeholder="0">
+    </div>
+</script>
+
+<script type="text/x-red" data-help-name="BACnet-ObjectId">
+    <h2>BACnet ObjectId node</h2>
+
+    <p>
+      A BACnet object ID: a type and an instance number.
+    </p>
+</script>

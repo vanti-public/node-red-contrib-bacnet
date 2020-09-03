@@ -1,0 +1,9 @@
+{
+  "bacnet-contrib": {
+    "label": {
+      "showErrors": "Show Errors",
+      "objectInstance": "Instance",
+      "objectType": "Type"
+    }
+  }
+}
