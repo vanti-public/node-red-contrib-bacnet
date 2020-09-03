@@ -3,7 +3,7 @@
     "label": {
       "device": "Device",
       "objectId": "Object Id",
-      "valueTag": "App-Tag",
+      "valueTag": "Type",
       "valueValue": "Value",
       "propertyId": "Property",
       "propertyIndex": "Index",

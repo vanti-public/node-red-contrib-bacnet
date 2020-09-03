@@ -13,7 +13,7 @@
     defaults: {
       name: {value: ''},
       objectId: {type: "BACnet-ObjectId", required:true},
-      valueTag: {value: '', required:true, validate: RED.validators.number()},
+      valueTag: {value: '', required:true},
       valueValue: {value: ''},
       propertyId: {value: '', required:true},
       priority: {value: ''},
@@ -56,36 +56,16 @@
         }
       });
 
-      let tagTypeLookupField = $("#node-lookup-valueTag")
-      let tagTypeField = $("#node-input-valueTag")
-
-      tagTypeLookupField.click(function () {
-        tagTypeLookupField.addClass('disabled')
-        $.getJSON('/bacnet/ApplicationTags', function (data) {
-          tagTypeLookupField.removeClass('disabled')
-          node.lookupItems = []
-
-          $.each(data, function (i, entry) {
-            node.lookupItems.push({value: entry.typeValue, label: entry.label})
-          })
-
-          tagTypeField.autocomplete({
-            source: node.lookupItems,
-            minLength: 0,
-            focus: function (event, ui) {
-              tagTypeField.val(ui.item.value);
-              return false;
-            },
-            select: function (event, ui) {
-              tagTypeField.val(ui.item.value)
-              return false;
-            },
-            close: function (event, ui) {
-              tagTypeField.autocomplete("destroy")
-            }
-          }).autocomplete("search", "")
-        })
-      })
+      $.getJSON('/bacnet/application-tags', function (options) {
+        const selected = node.valueTag ? node.valueTag : 'BOOLEAN';
+        for (let i = 0; i < options.length; i++) {
+          const option = $("<option></option>").attr("value", options[i]).text(options[i]);
+          if (options[i] === selected) {
+            option.attr('selected', 'selected');
+          }
+          $('#node-input-valueTag').append(option);
+        }
+      });
     }
   });
 </script>
@@ -104,9 +84,8 @@
         <hr>
     </div>
     <div class="form-row">
-        <label for="node-input-valueTag"><i class="icon-search"></i> <span data-i18n="bacnet-contrib.label.valueTag"></span></label>
-        <input type="text" id="node-input-valueTag" style="width:60%;" placeholder="9">
-        <a id="node-lookup-valueTag" class="btn"><i id="node-lookup-topic-icon" class="fa fa-search"></i></a>
+        <label for="node-input-valueTag"><i class="icon-tag"></i> <span data-i18n="bacnet-contrib.label.valueTag"></span></label>
+        <select class="type" type="text" id="node-input-valueTag"></select>
     </div>
     <div class="form-row">
         <label for="node-input-valueValue"><i class="icon-tag"></i> <span data-i18n="bacnet-contrib.label.valueValue"></span></label>

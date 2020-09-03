@@ -17,7 +17,7 @@ module.exports = function (RED) {
 
     this.name = config.name
     this.objectId = RED.nodes.getNode(config.objectId).objectId
-    this.valueTag = parseInt(config.valueTag)
+    this.valueTag = BACnet.enum.ApplicationTag[config.valueTag]
     this.valueValue = config.valueValue
     this.propertyId = BACnet.enum.PropertyIdentifier[config.propertyId]
     this.priority = parseInt(config.priority)
@@ -163,6 +163,10 @@ module.exports = function (RED) {
     }
 
     res.json(resultTypeList)
+  })
+
+  RED.httpAdmin.get('/bacnet/application-tags', RED.auth.needsPermission('bacnet.CMD.write'), function (req, res) {
+    res.json(Object.keys(BACnet.enum.ApplicationTag))
   })
 
   RED.httpAdmin.get('/bacnet/property-ids', RED.auth.needsPermission('bacnet.CMD.write'), function (req, res) {
