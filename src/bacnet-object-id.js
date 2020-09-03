@@ -10,7 +10,6 @@ const BACnet = require('node-bacnet')
 
 module.exports = function (RED) {
   function BACnetObjectId (config) {
-    this.log('creating ObjectId node', config)
     RED.nodes.createNode(this, config)
     this.name = config.name
 
