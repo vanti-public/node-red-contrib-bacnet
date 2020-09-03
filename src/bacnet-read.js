@@ -18,8 +18,7 @@ module.exports = function (RED) {
     this.propertyId = parseInt(config.propertyId)
     this.multipleRead = config.multipleRead
 
-    this.instance = RED.nodes.getNode(config.instance)
-    this.objectInstance = this.instance.instanceAddress || 0
+    this.objectId = RED.nodes.getNode(config.objectId).objectId
 
     this.device = RED.nodes.getNode(config.device)
     this.deviceIPAddress = this.device.deviceAddress || '127.0.0.1'
@@ -42,10 +41,7 @@ module.exports = function (RED) {
         bacnetCore.internalDebugLog('Multiple Read')
 
         const defaultRequestArray = [{
-          objectId: {
-            type: node.objectType,
-            instance: parseInt(node.objectInstance)
-          },
+          objectId: node.objectId,
           properties: [{ id: parseInt(node.propertyId) }]
         }]
 
@@ -76,10 +72,7 @@ module.exports = function (RED) {
       } else {
         bacnetCore.internalDebugLog('Read')
 
-        const objectId = {
-          type: node.objectType,
-          instance: parseInt(node.objectInstance)
-        }
+        const objectId = node.objectId
 
         try {
           bacnetCore.internalDebugLog('readProperty default objectId: ' + JSON.stringify(objectId))

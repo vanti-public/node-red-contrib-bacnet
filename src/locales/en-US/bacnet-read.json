@@ -2,8 +2,7 @@
   "bacnet-contrib": {
     "label": {
       "device": "Device",
-      "objectType": "Type",
-      "instance": "Instance",
+      "objectId": "Object Id",
       "propertyId": "Property Id",
       "arrayIndex": "Array Index",
       "multipleRead": "Multiple Read",

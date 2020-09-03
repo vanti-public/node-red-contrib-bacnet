@@ -12,8 +12,7 @@
     color: "#16BAC4",
     defaults: {
       name: {value: ''},
-      objectType: {value: ''},
-      instance: {type: "BACnet-Instance", required:true},
+      objectId: {type: "BACnet-ObjectId", required:true},
       propertyId: {value: ''},
       device: {type: "BACnet-Device", required:true},
       server: {type: "BACnet-Client", required:true},
@@ -31,50 +30,6 @@
     },
     oneditprepare: function () {
       let node = this
-
-      /*
-      let multipleWriteCheckbox = $("#node-input-multipleRead")
-      let requestArrayRow = $("#requestArray-row")
-
-      multipleWriteCheckbox.change(function () {
-        if ($(this).is(":checked")) {
-          requestArrayRow.show();
-        } else {
-          requestArrayRow.hide();
-        }
-      });
-      */
-
-      let objectTypeLookupField = $("#node-lookup-objectType")
-      let objectTypeField = $("#node-input-objectType")
-
-      objectTypeLookupField.click(function () {
-        objectTypeLookupField.addClass('disabled')
-        $.getJSON('/bacnet/ObjectTypes', function (data) {
-          objectTypeLookupField.removeClass('disabled')
-          node.lookupItems = []
-
-          $.each(data, function (i, entry) {
-            node.lookupItems.push({value: entry.typeValue, label: entry.label})
-          })
-
-          objectTypeField.autocomplete({
-            source: node.lookupItems,
-            minLength: 0,
-            focus: function (event, ui) {
-              objectTypeField.val(ui.item.value);
-              return false;
-            },
-            select: function (event, ui) {
-              objectTypeField.val(ui.item.value)
-              return false;
-            },
-            close: function (event, ui) {
-              objectTypeField.autocomplete("destroy")
-            }
-          }).autocomplete("search", "")
-        })
-      })
 
       let datatypeLookupField = $("#node-lookup-propertyId")
       let datatypeField = $("#node-input-propertyId")
@@ -116,13 +71,8 @@
         <input type="text" id="node-input-name" placeholder="">
     </div>
     <div class="form-row">
-        <label for="node-input-objectType"><i class="icon-search"></i> <span data-i18n="bacnet-contrib.label.objectType"></span></label>
-        <input type="text" id="node-input-objectType" style="width:60%;" placeholder="8">
-        <a id="node-lookup-objectType" class="btn"><i id="node-lookup-topic-icon" class="fa fa-search"></i></a>
-    </div>
-    <div class="form-row">
-        <label for="node-input-instance"><i class="icon-globe"></i> <span data-i18n="bacnet-contrib.label.instance"></span></label>
-        <input type="text" id="node-input-instance">
+        <label for="node-input-objectId"><i class="icon-globe"></i> <span data-i18n="bacnet-contrib.label.objectId"></span></label>
+        <input type="text" id="node-input-objectId">
     </div>
     <div class="form-row">
         <h4>Properties</h4>

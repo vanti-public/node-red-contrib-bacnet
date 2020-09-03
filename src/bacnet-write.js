@@ -16,16 +16,13 @@ module.exports = function (RED) {
     RED.nodes.createNode(this, config)
 
     this.name = config.name
-    this.objectType = parseInt(config.objectType)
+    this.objectId = RED.nodes.getNode(config.objectId).objectId
     this.valueTag = parseInt(config.valueTag)
     this.valueValue = config.valueValue
     this.propertyId = parseInt(config.propertyId)
     this.priority = parseInt(config.priority)
 
     this.multipleWrite = config.multipleWrite
-
-    this.instance = RED.nodes.getNode(config.instance)
-    this.objectInstance = this.instance.instanceAddress || 0
 
     this.device = RED.nodes.getNode(config.device)
     this.deviceIPAddress = this.device.deviceAddress || '127.0.0.1' // IPv6 it is :: - but configure Node-RED too
@@ -57,10 +54,7 @@ module.exports = function (RED) {
 
         msg.payload.values.forEach(function (item) {
           if (!item.objectId) {
-            item.objectId = {
-              type: node.objectType,
-              instance: parseInt(node.objectInstance)
-            }
+            item.objectId = node.objectId
           }
         })
 
@@ -93,10 +87,7 @@ module.exports = function (RED) {
           return
         }
 
-        const objectId = {
-          type: node.objectType,
-          instance: parseInt(node.objectInstance)
-        }
+        const objectId = node.objectId
 
         const defaultValues = [{
           type: node.valueTag,
@@ -172,5 +163,13 @@ module.exports = function (RED) {
     }
 
     res.json(resultTypeList)
+  })
+
+  RED.httpAdmin.get('/bacnet/property-ids', RED.auth.needsPermission('bacnet.CMD.write'), function (req, res) {
+    res.json(Object.keys(BACnet.enum.PropertyIdentifier))
+  })
+
+  RED.httpAdmin.get('/bacnet/object-types', RED.auth.needsPermission('bacnet.CMD.write'), function (req, res) {
+    res.json(Object.keys(BACnet.enum.ObjectType))
   })
 }

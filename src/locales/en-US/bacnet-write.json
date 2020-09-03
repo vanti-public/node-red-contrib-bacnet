@@ -2,8 +2,7 @@
   "bacnet-contrib": {
     "label": {
       "device": "Device",
-      "objectType": "Type",
-      "instance": "Instance",
+      "objectId": "Object Id",
       "valueTag": "App-Tag",
       "valueValue": "Value",
       "propertyId": "Property",
