@@ -9,13 +9,14 @@
 
 module.exports = function (RED) {
   const bacnetCore = require('./core/bacnet-core')
+  const BACnet = require('node-bacnet')
 
   function BACnetRead (config) {
     RED.nodes.createNode(this, config)
 
     this.name = config.name
     this.objectType = parseInt(config.objectType)
-    this.propertyId = parseInt(config.propertyId)
+    this.propertyId = BACnet.enum.PropertyIdentifier[config.propertyId]
     this.multipleRead = config.multipleRead
 
     this.objectId = RED.nodes.getNode(config.objectId).objectId

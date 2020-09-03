@@ -15,7 +15,7 @@
       objectId: {type: "BACnet-ObjectId", required:true},
       valueTag: {value: '', required:true, validate: RED.validators.number()},
       valueValue: {value: ''},
-      propertyId: {value: '', required:true, validate: RED.validators.number()},
+      propertyId: {value: '', required:true},
       priority: {value: ''},
       device: {type: "BACnet-Device", required:true},
       server: {type: "BACnet-Client", required:true},
@@ -45,36 +45,16 @@
         }
       });
 
-      let datatypeLookupField = $("#node-lookup-propertyId")
-      let datatypeField = $("#node-input-propertyId")
-
-      datatypeLookupField.click(function () {
-        datatypeLookupField.addClass('disabled')
-        $.getJSON('/bacnet/PropertyIds', function (data) {
-          datatypeLookupField.removeClass('disabled')
-          node.lookupItems = []
-
-          $.each(data, function (i, entry) {
-            node.lookupItems.push({value: entry.typeValue, label: entry.label})
-          })
-
-          datatypeField.autocomplete({
-            source: node.lookupItems,
-            minLength: 0,
-            focus: function (event, ui) {
-              datatypeField.val(ui.item.value);
-              return false;
-            },
-            select: function (event, ui) {
-              datatypeField.val(ui.item.value)
-              return false;
-            },
-            close: function (event, ui) {
-              datatypeField.autocomplete("destroy")
-            }
-          }).autocomplete("search", "")
-        })
-      })
+      $.getJSON('/bacnet/property-ids', function (options) {
+        const selected = node.propertyId ? node.propertyId : 'PRESENT_VALUE';
+        for (let i = 0; i < options.length; i++) {
+          const option = $("<option></option>").attr("value", options[i]).text(options[i]);
+          if (options[i] === selected) {
+            option.attr('selected', 'selected');
+          }
+          $('#node-input-propertyId').append(option);
+        }
+      });
 
       let tagTypeLookupField = $("#node-lookup-valueTag")
       let tagTypeField = $("#node-input-valueTag")
@@ -137,9 +117,8 @@
         <hr>
     </div>
     <div class="form-row">
-        <label for="node-input-propertyId"><i class="icon-search"></i> <span data-i18n="bacnet-contrib.label.propertyId"></span></label>
-        <input type="text" id="node-input-propertyId" style="width:60%;" placeholder="85">
-        <a id="node-lookup-propertyId" class="btn"><i id="node-lookup-topic-icon" class="fa fa-search"></i></a>
+        <label for="node-input-propertyId"><i class="icon-tag"></i> <span data-i18n="bacnet-contrib.label.propertyId"></span></label>
+        <select class="type" type="text" id="node-input-propertyId"></select>
     </div>
     <div class="form-row">
         <label for="node-input-priority"><i class="icon-tag"></i> <span data-i18n="bacnet-contrib.label.priority"></span></label>

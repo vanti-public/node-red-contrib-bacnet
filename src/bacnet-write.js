@@ -19,7 +19,7 @@ module.exports = function (RED) {
     this.objectId = RED.nodes.getNode(config.objectId).objectId
     this.valueTag = parseInt(config.valueTag)
     this.valueValue = config.valueValue
-    this.propertyId = parseInt(config.propertyId)
+    this.propertyId = BACnet.enum.PropertyIdentifier[config.propertyId]
     this.priority = parseInt(config.priority)
 
     this.multipleWrite = config.multipleWrite
